@@ -7,15 +7,15 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
   <!-- Intro splash glitch -->
   <div class="intro" aria-hidden="true">
     <div class="glitch" style="--intro-img:url('assets/BOOMBOOM.png')"></div>
   </div>
 
-  <div class="desktop">
-    <div class="desktop-icons">
-<a class="icon img-icon" href="#infos" aria-label="Infos">
+  <div class="desktop" role="application" aria-label="Windows XP style desktop">
+    <img class="wordart" src="assets/wordart.png" alt="12, 13, 14 décembre 2025" />
+    <div class="desktop-icons" role="navigation" aria-label="Desktop shortcuts">
+      <a class="icon img-icon" href="#infos" aria-label="Infos">
         <img src="assets/infos.png" alt="Infos" class="desk-img" />
         <span class="label">Infos</span>
       </a>
@@ -27,56 +27,25 @@
         <img src="assets/msn.png" alt="MSN" class="desk-img" />
         <span class="label">MSN</span>
       </a>
-</div>
-    <div class="taskbar">
-      <button class="start-button"><img class="start-img" src="assets/Start Button.png" alt="Start" /></button>
-      <div class="tray"><img class="tray-img" src="assets/Time + Language.png" alt="Language and clock" /></div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar" role="toolbar" aria-label="Barre des tâches">
+      <button class="start-button" aria-label="Start">
+        <img class="start-img" src="assets/Start Button.png" alt="Start" />
+      </button>
+
+      <div class="task-buttons">
+        <button class="task active" aria-label="Projects">
+          <img class="task-img" src="assets/Taskbar Button.png" alt="Projects" />
+        </button>
+      </div>
+
+      <div class="tray" aria-label="System tray">
+        <img class="tray-img" src="assets/Time + Language.png" alt="Language and clock" />
+      </div>
     </div>
   </div>
-
-  <script>
-    /* TASKBAR-AUTOHIDE */
-    (function(){
-      const bar = document.querySelector('.taskbar');
-      if(!bar) return;
-
-      let lastY = window.scrollY || 0;
-      let ticking = false;
-
-      function update(){
-        const mobile = window.matchMedia('(max-width: 640px)').matches;
-        if(!mobile){
-          bar.classList.remove('hidden');
-          lastY = window.scrollY || 0;
-          return;
-        }
-        const y = window.scrollY || 0;
-        const down = y > lastY + 6;
-        const up   = y < lastY - 6;
-
-        if(down && y > 12){
-          bar.classList.add('hidden');
-        } else if(up){
-          bar.classList.remove('hidden');
-        }
-        lastY = y;
-      }
-
-      window.addEventListener('scroll', function(){
-        if(!ticking){
-          window.requestAnimationFrame(function(){
-            update();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
-
-      window.addEventListener('resize', update);
-      update();
-    })();
-  </script>
-
 
   <script>
     /* ICON-SELECTION-LOGIC */
@@ -100,59 +69,45 @@
         }
       });
     })();
-  </script>
 
+    /* TASKBAR-AUTOHIDE */
+    (function(){
+      const bar = document.querySelector('.taskbar');
+      if(!bar) return;
+      let lastY = window.scrollY || 0, ticking=false;
+      function update(){
+        const mobile = window.matchMedia('(max-width: 640px)').matches;
+        if(!mobile){ bar.classList.remove('hidden'); lastY = window.scrollY||0; return; }
+        const y = window.scrollY||0; const down = y > lastY + 6; const up = y < lastY - 6;
+        if(down && y > 12){ bar.classList.add('hidden'); } else if(up){ bar.classList.remove('hidden'); }
+        lastY = y;
+      }
+      window.addEventListener('scroll', ()=>{
+        if(!ticking){ requestAnimationFrame(()=>{ update(); ticking=false; }); ticking=true; }
+      }, {passive:true});
+      window.addEventListener('resize', update); update();
+    })();
 
-  
-  <script>
     /* INTRO-GLITCH-BOOT (v2: 2s static -> glitch -> flash -> reveal + sound) */
     (function(){
       const intro = document.querySelector('.intro');
       const glitchLayer = document.querySelector('.glitch');
       if(!intro || !glitchLayer) return;
-
-      // Create white flash layer
-      const flash = document.createElement('div');
-      flash.className = 'flash';
-      intro.appendChild(flash);
-
-      // Prepare sound
-      const audio = new Audio('assets/glitch.wav');
-      audio.preload = 'auto';
-      audio.volume = 0.6;
-
+      const flash = document.createElement('div'); flash.className = 'flash'; intro.appendChild(flash);
+      const audio = new Audio('assets/glitch.wav'); audio.preload = 'auto'; audio.volume = 0.6;
       function tryPlay(){
         const p = audio.play();
         if(p && typeof p.then === 'function'){
-          p.catch(() => {
-            // Autoplay blocked: play on first user interaction
-            const once = () => { audio.play().catch(()=>{}); window.removeEventListener('pointerdown', once); };
-            window.addEventListener('pointerdown', once, { once:true });
-          });
+          p.catch(()=>{ const once=()=>{ audio.play().catch(()=>{}); window.removeEventListener('pointerdown', once); };
+                        window.addEventListener('pointerdown', once, {once:true}); });
         }
       }
-
-      // Sequence:
-      // 0-2000ms: static image
-      // 2000ms: start glitch + play sound
-      // 2000ms + 1200ms: hard flash cut (120ms) then hide intro
-      const t0 = 2000;        // static time
-      const glitchDur = 1200; // must match CSS animations
-      const flashDur = 120;   // ms
-
-      setTimeout(() => {
-        intro.classList.add('glitching');
-        tryPlay();
-        setTimeout(() => {
-          flash.classList.add('show');
-          setTimeout(() => {
-            intro.classList.add('hidden');
-          }, flashDur);
-        }, glitchDur);
+      const t0 = 2000, glitchDur = 1200, flashDur = 120;
+      setTimeout(()=>{
+        intro.classList.add('glitching'); tryPlay();
+        setTimeout(()=>{ flash.classList.add('show'); setTimeout(()=>{ intro.classList.add('hidden'); }, flashDur); }, glitchDur);
       }, t0);
     })();
   </script>
-
-
 </body>
 </html>
