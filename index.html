@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Landing — XP Style</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Intro splash glitch -->
+  <div class="intro" aria-hidden="true">
+    <div class="glitch" style="--intro-img:url('assets/BOOMBOOM.png')"></div>
+  </div>
+
+  <div class="desktop">
+    <div class="desktop-icons">
+<a class="icon img-icon" href="#infos" aria-label="Infos">
+        <img src="assets/infos.png" alt="Infos" class="desk-img" />
+        <span class="label">Infos</span>
+      </a>
+      <a class="icon img-icon" href="#skyblog" aria-label="Skyblog">
+        <img src="assets/skyblog.png" alt="Skyblog" class="desk-img" />
+        <span class="label">Skyblog</span>
+      </a>
+      <a class="icon img-icon" href="#msn" aria-label="MSN">
+        <img src="assets/msn.png" alt="MSN" class="desk-img" />
+        <span class="label">MSN</span>
+      </a>
+</div>
+    <div class="taskbar">
+      <button class="start-button"><img class="start-img" src="assets/Start Button.png" alt="Start" /></button>
+      <div class="tray"><img class="tray-img" src="assets/Time + Language.png" alt="Language and clock" /></div>
+    </div>
+  </div>
+
+  <script>
+    /* TASKBAR-AUTOHIDE */
+    (function(){
+      const bar = document.querySelector('.taskbar');
+      if(!bar) return;
+
+      let lastY = window.scrollY || 0;
+      let ticking = false;
+
+      function update(){
+        const mobile = window.matchMedia('(max-width: 640px)').matches;
+        if(!mobile){
+          bar.classList.remove('hidden');
+          lastY = window.scrollY || 0;
+          return;
+        }
+        const y = window.scrollY || 0;
+        const down = y > lastY + 6;
+        const up   = y < lastY - 6;
+
+        if(down && y > 12){
+          bar.classList.add('hidden');
+        } else if(up){
+          bar.classList.remove('hidden');
+        }
+        lastY = y;
+      }
+
+      window.addEventListener('scroll', function(){
+        if(!ticking){
+          window.requestAnimationFrame(function(){
+            update();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>
+
+
+  <script>
+    /* ICON-SELECTION-LOGIC */
+    (function(){
+      const container = document.querySelector('.desktop-icons');
+      if(!container) return;
+      function clearSelection(){
+        container.querySelectorAll('.icon.img-icon.selected').forEach(el => el.classList.remove('selected'));
+      }
+      document.addEventListener('click', function(e){
+        const icon = e.target.closest && e.target.closest('.icon.img-icon');
+        if(icon){
+          const href = icon.getAttribute('href') || '';
+          clearSelection();
+          icon.classList.add('selected');
+          if(href.startsWith('#')) e.preventDefault();
+          return;
+        }
+        if(!e.target.closest('.taskbar') && !e.target.closest('.desktop-icons')){
+          clearSelection();
+        }
+      });
+    })();
+  </script>
+
+
+  
+  <script>
+    /* INTRO-GLITCH-BOOT (v2: 2s static -> glitch -> flash -> reveal + sound) */
+    (function(){
+      const intro = document.querySelector('.intro');
+      const glitchLayer = document.querySelector('.glitch');
+      if(!intro || !glitchLayer) return;
+
+      // Create white flash layer
+      const flash = document.createElement('div');
+      flash.className = 'flash';
+      intro.appendChild(flash);
+
+      // Prepare sound
+      const audio = new Audio('assets/glitch.wav');
+      audio.preload = 'auto';
+      audio.volume = 0.6;
+
+      function tryPlay(){
+        const p = audio.play();
+        if(p && typeof p.then === 'function'){
+          p.catch(() => {
+            // Autoplay blocked: play on first user interaction
+            const once = () => { audio.play().catch(()=>{}); window.removeEventListener('pointerdown', once); };
+            window.addEventListener('pointerdown', once, { once:true });
+          });
+        }
+      }
+
+      // Sequence:
+      // 0-2000ms: static image
+      // 2000ms: start glitch + play sound
+      // 2000ms + 1200ms: hard flash cut (120ms) then hide intro
+      const t0 = 2000;        // static time
+      const glitchDur = 1200; // must match CSS animations
+      const flashDur = 120;   // ms
+
+      setTimeout(() => {
+        intro.classList.add('glitching');
+        tryPlay();
+        setTimeout(() => {
+          flash.classList.add('show');
+          setTimeout(() => {
+            intro.classList.add('hidden');
+          }, flashDur);
+        }, glitchDur);
+      }, t0);
+    })();
+  </script>
+
+
+</body>
+</html>
