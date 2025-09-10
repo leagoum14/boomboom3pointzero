@@ -7,107 +7,159 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Intro splash glitch -->
-  <div class="intro" aria-hidden="true">
-    <div class="glitch" style="--intro-img:url('assets/BOOMBOOM.png')"></div>
-  </div>
-
+  <div class="intro" aria-hidden="true"><div class="glitch" style="--intro-img:url('assets/BOOMBOOM.png')"></div></div>
   <div class="desktop" role="application" aria-label="Windows XP style desktop">
+    <video class="bg-video" aria-hidden="true" autoplay muted loop playsinline preload="metadata" poster="assets/bliss.jpg">
+      <source src="assets/bg.webm" type="video/webm">
+      <source src="assets/bg.mp4" type="video/mp4">
+    </video>
     <img class="wordart" src="assets/wordart.png" alt="12, 13, 14 décembre 2025" />
     <div class="desktop-icons" role="navigation" aria-label="Desktop shortcuts">
       <a class="icon img-icon" href="#infos" aria-label="Infos">
         <img src="assets/infos.png" alt="Infos" class="desk-img" />
         <span class="label">Infos</span>
       </a>
-      <a class="icon img-icon" href="#skyblog" aria-label="Skyblog">
+      <a class="icon img-icon" href="https://www.instagram.com/laboomboom3.0/" aria-label="Skyblog" target="_blank" rel="noopener">
         <img src="assets/skyblog.png" alt="Skyblog" class="desk-img" />
         <span class="label">Skyblog</span>
       </a>
-      <a class="icon img-icon" href="#msn" aria-label="MSN">
+      <a class="icon img-icon" href="https://chat.whatsapp.com/CQbxWrl6pBbBTdw6TjNXYp?mode=ems_copy_h_c" aria-label="MSN" target="_blank" rel="noopener">
         <img src="assets/msn.png" alt="MSN" class="desk-img" />
         <span class="label">MSN</span>
       </a>
     </div>
-
-    <!-- Taskbar -->
-    <div class="taskbar" role="toolbar" aria-label="Barre des tâches">
-      <button class="start-button" aria-label="Start">
-        <img class="start-img" src="assets/Start Button.png" alt="Start" />
-      </button>
-
-      <div class="task-buttons">
-        <button class="task active" aria-label="Projects">
-          <img class="task-img" src="assets/Taskbar Button.png" alt="Projects" />
-        </button>
+    <div class="taskbar">
+      <button class="start-button"><img class="start-img" src="assets/Start Button.png" alt="Start" /></button>
+      <div class="task-buttons"><a class="task task-link" href="https://link.deezer.com/s/310mg3GYrzpvLkUzjSCPq" target="_blank" rel="noopener" aria-label="Music Playlist"><img class="task-img" src="assets/music playlist.png" alt="Music Playlist" /></a></div>
+      <div class="tray"><img class="tray-img" src="assets/Time + Language.png" alt="Language and clock" /></div>
+    </div>
+  
+  <!-- Reminder popup -->
+  <div class="reminder-modal" role="dialog" aria-labelledby="reminder-title" aria-modal="true" aria-hidden="true">
+    <div class="reminder-card">
+      <div class="reminder-titlebar">
+        <span id="reminder-title">Rappel</span>
       </div>
-
-      <div class="tray" aria-label="System tray">
-        <img class="tray-img" src="assets/Time + Language.png" alt="Language and clock" />
+      <div class="reminder-body">
+        <p>Rdv le mercredi <strong>24/09</strong> à <strong>20h30</strong> en visio<br/>
+        pour le kick off de la Boom Boom 3.0</p>
+        <button class="reminder-ok" type="button" aria-label="Fermer la fenêtre">OK</button>
       </div>
     </div>
   </div>
 
+
+  <!-- Infos modal (text, XP style) -->
+  <div class="info-modal" role="dialog" aria-labelledby="info-title" aria-modal="true" aria-hidden="true">
+    <div class="info-card">
+      <div class="info-titlebar"><span id="info-title">Infos</span></div>
+      <div class="info-body">
+        <p>🎉 <strong>Boom Boom 3.0</strong>, c’est un festival participatif en auto gestion.<br>
+        Ici, pas de spectateurs : chacun est acteur de son week-end. Tu files un coup de main en amont ou sur place, selon tes dispos : monter une déco, lancer une activité, gérer la bouffe ou passer un coup de balai.</p>
+
+        <p>👉 Imagine un énorme week-end entre potes dans un gîte : on kiffe, on danse, mais on se débrouille ensemble pour que ça tourne.<br>
+        Pas de staff, pas de traiteur, pas de femme de ménage.<br>
+        Ici c’est DIY : par nous, pour nous.</p>
+
+        <p>💥 Ton pass Boom Boom 3.0, c’est tout compris. Bouffe à volonté comme chez ta mamie, alcool sans fin façon projet X. Un lit sur place, comme à la colo mais en mieux. Deux soirées : DJ sets &amp; surprises, vibes de 95 à aujourd’hui. Des activités pour souffler, des rencontres qui marquent plus qu’un premier skyblog. Une dark room et une salle d’arcade, entre Mortal Kombat et baisers volés.</p>
+
+        <p>📍 <strong>Lieu</strong><br>
+        Un grand gîte champêtre, à 10 min de la gare du Mans.</p>
+
+        <p>🚗 <strong>Venir</strong><br>
+        Covoiturage depuis Paris ou en train jusqu’à la gare du Mans</p>
+
+        <p>🗓️ <strong>Dates</strong><br>
+        Du vendredi 12 au dimanche 14 décembre 2025.</p>
+
+        <p>🎶 <strong>Programmation musicale</strong><br>
+        En construction ! Si tu veux proposer un set, une animation ou une surprise → c’est le moment.</p>
+
+        <p>✨ <strong>Le mood ?</strong><br>
+        Retour dans les années 95 → 2025 : de la régression totale aux vibes futuristes.</p>
+      </div>
+      <div class="info-actions">
+        <button class="info-ok" type="button" aria-label="Fermer">OK</button>
+      </div>
+    </div>
+  </div>
+
+</div>
   <script>
-    /* ICON-SELECTION-LOGIC */
-    (function(){
-      const container = document.querySelector('.desktop-icons');
-      if(!container) return;
-      function clearSelection(){
-        container.querySelectorAll('.icon.img-icon.selected').forEach(el => el.classList.remove('selected'));
-      }
-      document.addEventListener('click', function(e){
-        const icon = e.target.closest && e.target.closest('.icon.img-icon');
-        if(icon){
-          const href = icon.getAttribute('href') || '';
-          clearSelection();
-          icon.classList.add('selected');
-          if(href.startsWith('#')) e.preventDefault();
-          return;
-        }
-        if(!e.target.closest('.taskbar') && !e.target.closest('.desktop-icons')){
-          clearSelection();
-        }
-      });
-    })();
+  (function(){const bar=document.querySelector('.taskbar');if(!bar)return;let a=window.scrollY||0,t=!1;function n(){const e=window.matchMedia('(max-width: 640px)').matches;if(!e){bar.classList.remove('hidden'),a=window.scrollY||0;return}const s=window.scrollY||0,c=s>a+6,d=s<a-6;c&&s>12?bar.classList.add('hidden'):d&&bar.classList.remove('hidden'),a=s}window.addEventListener('scroll',()=>{t||(requestAnimationFrame(()=>{n(),t=!1}),t=!0)},{passive:!0}),window.addEventListener('resize',n),n()})();</script>
 
-    /* TASKBAR-AUTOHIDE */
-    (function(){
-      const bar = document.querySelector('.taskbar');
-      if(!bar) return;
-      let lastY = window.scrollY || 0, ticking=false;
-      function update(){
-        const mobile = window.matchMedia('(max-width: 640px)').matches;
-        if(!mobile){ bar.classList.remove('hidden'); lastY = window.scrollY||0; return; }
-        const y = window.scrollY||0; const down = y > lastY + 6; const up = y < lastY - 6;
-        if(down && y > 12){ bar.classList.add('hidden'); } else if(up){ bar.classList.remove('hidden'); }
-        lastY = y;
-      }
-      window.addEventListener('scroll', ()=>{
-        if(!ticking){ requestAnimationFrame(()=>{ update(); ticking=false; }); ticking=true; }
-      }, {passive:true});
-      window.addEventListener('resize', update); update();
-    })();
+  <script>
+  (function(){const intro=document.querySelector('.intro');if(!intro)return;const f=document.createElement('div');f.className='flash',intro.appendChild(f);const audio=new Audio('assets/glitch.wav');audio.preload='auto',audio.volume=.6;function play(){const p=audio.play();p&&typeof p.then=='function'&&p.catch(()=>{const once=()=>{audio.play().catch(()=>{}),window.removeEventListener('pointerdown',once)};window.addEventListener('pointerdown',once,{once:!0})})}const t0=2000,g=1200,fd=120;setTimeout(()=>{intro.classList.add('glitching'),play(),setTimeout(()=>{f.classList.add('show'),setTimeout(()=>{intro.classList.add('hidden')},fd)},g)},t0)})();</script>
 
+  <script>
+    /* REMINDER-POPUP-LOGIC */
+    (function(){
+      const modal = document.querySelector('.reminder-modal');
+      const okBtn = modal && modal.querySelector('.reminder-ok');
+      if(!modal || !okBtn) return;
+      function openReminder(){ modal.classList.add('show'); }
+      function closeReminder(){ modal.classList.remove('show'); }
+      okBtn.addEventListener('click', closeReminder);
+      const intro = document.querySelector('.intro');
+      if(intro){
+        const observer = new MutationObserver(()=>{
+          if(intro.classList.contains('hidden')){ openReminder(); observer.disconnect(); }
+        });
+        observer.observe(intro, { attributes:true, attributeFilter:['class'] });
+      } else { setTimeout(openReminder, 3500); }
+    })();
+  </script>
+
+
+  <script>
+    /* INFOS-MODAL-LOGIC */
+    (function(){
+      const modal = document.querySelector('.info-modal');
+      const okBtn = modal && modal.querySelector('.info-ok');
+      const infosLink = document.querySelector('.desktop-icons a[aria-label="Infos"]');
+      if(!modal || !okBtn || !infosLink) return;
+      function openModal(e){ e.preventDefault(); modal.classList.add('show'); }
+      function closeModal(){ modal.classList.remove('show'); }
+      infosLink.addEventListener('click', openModal);
+      okBtn.addEventListener('click', closeModal);
+      window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+    })();
+  </script>
+
+
+  <script>
     /* INTRO-GLITCH-BOOT (v2: 2s static -> glitch -> flash -> reveal + sound) */
     (function(){
       const intro = document.querySelector('.intro');
       const glitchLayer = document.querySelector('.glitch');
       if(!intro || !glitchLayer) return;
-      const flash = document.createElement('div'); flash.className = 'flash'; intro.appendChild(flash);
-      const audio = new Audio('assets/glitch.wav'); audio.preload = 'auto'; audio.volume = 0.6;
+      // Create white flash if not present
+      let flash = intro.querySelector('.flash');
+      if(!flash){ flash = document.createElement('div'); flash.className = 'flash'; intro.appendChild(flash); }
+      // Optional sound if present
+      let audio;
+      try { audio = new Audio('assets/glitch.wav'); audio.preload = 'auto'; audio.volume = 0.6; } catch(e){}
       function tryPlay(){
-        const p = audio.play();
+        if(!audio) return;
+        const p = audio.play && audio.play();
         if(p && typeof p.then === 'function'){
-          p.catch(()=>{ const once=()=>{ audio.play().catch(()=>{}); window.removeEventListener('pointerdown', once); };
-                        window.addEventListener('pointerdown', once, {once:true}); });
+          p.catch(() => {
+            const once = () => { audio.play().catch(()=>{}); window.removeEventListener('pointerdown', once); };
+            window.addEventListener('pointerdown', once, { once:true });
+          });
         }
       }
       const t0 = 2000, glitchDur = 1200, flashDur = 120;
-      setTimeout(()=>{
-        intro.classList.add('glitching'); tryPlay();
-        setTimeout(()=>{ flash.classList.add('show'); setTimeout(()=>{ intro.classList.add('hidden'); }, flashDur); }, glitchDur);
+      setTimeout(() => {
+        intro.classList.add('glitching');
+        tryPlay();
+        setTimeout(() => {
+          flash.classList.add('show');
+          setTimeout(() => { intro.classList.add('hidden'); }, flashDur);
+        }, glitchDur);
       }, t0);
     })();
   </script>
+
 </body>
 </html>
